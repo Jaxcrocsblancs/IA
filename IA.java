@@ -10,7 +10,7 @@ public class IA {
 	
 	public int UTC(Etat e){
 		long tempsDébut = System.currentTimeMillis();
-		int durée = 3000;
+		int durée = 1000;
 		int i = 0;
 		ArrayList<Noeud> listNoeud = new ArrayList<Noeud>();
 		Noeud racine = new Noeud(new Etat(e), 0);
@@ -77,10 +77,10 @@ public class IA {
 			i++;
 			
 		}
-		System.out.println("NB itération: "+i);
-		for(int i1 =0; i1<racine.getNb_enfants();i1++){
-			System.out.println(i1+" "+listNoeud.get(racine.getEnfant(i1)).getB()+" "+listNoeud.get(racine.getEnfant(i1)).getVictoire()+" "+listNoeud.get(racine.getEnfant(i1)).getPassage());
-		}
+		System.out.println("NB itération: "+i+" Probabilité de victoire: "+listNoeud.get(Max(0,listNoeud)).getB());
+//		for(int i1 =0; i1<racine.getNb_enfants();i1++){
+//			System.out.println(i1+" "+listNoeud.get(racine.getEnfant(i1)).getB()+" "+listNoeud.get(racine.getEnfant(i1)).getVictoire()+" "+listNoeud.get(racine.getEnfant(i1)).getPassage());
+//		}
 		return listNoeud.get(Max(0,listNoeud)).getCoup();
 	}		
 

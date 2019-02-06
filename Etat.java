@@ -134,7 +134,7 @@ public class Etat {
 				j--;
 			}
 			compteur = 0;
-			for(int k=0; i+k<this.plateau.length && j-k>0; k++){
+			for(int k=0; i+k<this.plateau.length && j-k>=0; k++){
 				if(this.plateau[i+k][j-k]==joueur){
 					compteur++;
 				}

@@ -8,6 +8,7 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -73,7 +74,9 @@ public class Fenetre extends JPanel implements Observer{
 				this.choix[i].setEnabled(false);
 			}
 		}
-		
+		if(m.getEtat().testFin() != FinDePartie.NON){
+			JOptionPane.showMessageDialog(null,m.getEtat().testFin());
+		}
 	}
 	
 	
