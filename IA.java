@@ -16,81 +16,100 @@ public class IA {
 		Noeud racine = new Noeud(new Etat(e), 0);
 		listNoeud.add(racine);
 		for(int c: coupsPossible(e)){
-			racine.ajouterEnfant(c);
+			Noeud enfant = new Noeud(listNoeud.get(0).getEtat().coups(c), 0, listNoeud.get(0).getJoueur(),c);
+			listNoeud.add(enfant);
+			racine.ajouterEnfant(c,listNoeud.size()-1);
 		}
-		Noeud current, currentbis;
+		int current, currentbis;
 		int indexRand;
 		while(System.currentTimeMillis()< (tempsDébut+durée)){//boucle tant qu'il reste du temps
-			current = racine;//retour à la racine
-			while(current.enfantTousDeveloppé()){//recherche d'un noeud pour continuer
-				if(current.getNb_enfants() == 0){
-					for(int c: coupsPossible(current.getEtat())){
-						current.ajouterEnfant(c);
+			current = 0;//retour à la racine
+			while(listNoeud.get(current).enfantTousDeveloppé(listNoeud)){//recherche d'un noeud pour continuer
+				if(listNoeud.get(current).getNb_enfants() == 0){
+					for(int c: coupsPossible(listNoeud.get(current).getEtat())){
+						Noeud enfant = new Noeud(listNoeud.get(current).getEtat().coups(c), current, listNoeud.get(current).getJoueur(),c);
+						listNoeud.add(enfant);
+						listNoeud.get(current).ajouterEnfant(c,listNoeud.size()-1);
 					}
 				}
-				current = MaxB(current);// selection du noeud suivant
+				current = MaxB(current, listNoeud);// selection du noeud suivant
 			}
-			while(current.getEtat().testFin() == FinDePartie.NON){//Marche aléatoire
-				ArrayList<Integer>lC = this.coupsPossible(current.getEtat());
-				indexRand = (int) (Math.random() * lC.size());
-				current = new Noeud(current.getEtat().coups(lC.get(indexRand)),current, lC.get(indexRand));
+			while(listNoeud.get(current).getEtat().testFin() == FinDePartie.NON){//Marche aléatoire
+				boolean pasFin = true;
+				if(listNoeud.get(current).getNb_enfants() == 0){
+					for(int c: coupsPossible(listNoeud.get(current).getEtat())){
+						Noeud enfant = new Noeud(listNoeud.get(current).getEtat().coups(c), current, listNoeud.get(current).getJoueur(),c);
+						listNoeud.add(enfant);
+						listNoeud.get(current).ajouterEnfant(c,listNoeud.size()-1);
+//						if(enfant.getEtat().testFin() != FinDePartie.NON){//test si fin de partie possible plutot que aléatoire
+//							current =listNoeud.size()-1;
+//							pasFin = false;
+//						}
+					}
+				}
+				if(pasFin){
+					indexRand = (int) (Math.random() * listNoeud.get(current).getNb_enfants());
+					current = listNoeud.get(current).getEnfant(indexRand);
+				}
 			}
 			boolean vic=false;
-			if(current.getEtat().testFin() == FinDePartie.ORDI_GAGNE){
+			if(listNoeud.get(current).getEtat().testFin() == FinDePartie.ORDI_GAGNE){
 				vic = true;
 			}
 			//System.out.println(racine + " "+current);
 			
 			currentbis = current;
-			while(currentbis != racine){
+			while(currentbis != 0){
 				if(vic){
-					currentbis.setVictoire();
+					listNoeud.get(currentbis).setVictoire();
 				}
-				currentbis.setPassage();
-				currentbis= currentbis.getParent();
+				listNoeud.get(currentbis).setPassage();
+				currentbis= listNoeud.get(currentbis).getParent();
 			}
 
-			currentbis.setPassage();currentbis.setVictoire();
-			while(current != racine){//remonté de b
-				current.calcB();
-				current = current.getParent();
+			listNoeud.get(currentbis).setPassage();
+			listNoeud.get(currentbis).setVictoire();
+			while(current != 0){//remonté de b
+				listNoeud.get(current).calcB(listNoeud);
+				current= listNoeud.get(current).getParent();
 			}
 			
 			i++;
-			System.out.println("NB itération: "+i);
+			
 		}
+		System.out.println("NB itération: "+i);
 		for(int i1 =0; i1<racine.getNb_enfants();i1++){
-			System.out.println(i1+" "+racine.getEnfant(i1).getB()+" "+racine.getEnfant(i1).getVictoire()+" "+racine.getEnfant(i1).getPassage());
+			System.out.println(i1+" "+listNoeud.get(racine.getEnfant(i1)).getB()+" "+listNoeud.get(racine.getEnfant(i1)).getVictoire()+" "+listNoeud.get(racine.getEnfant(i1)).getPassage());
 		}
-		return Max(racine).getCoup();
+		return listNoeud.get(Max(0,listNoeud)).getCoup();
 	}		
 
-	private Noeud Max(Noeud n) {
+	private int Max(int n, ArrayList<Noeud> lNoeud) {
 		int max = -1;
-		for(int i=0; i<n.getNb_enfants(); i++){
+		for(int i=0; i<lNoeud.get(n).getNb_enfants(); i++){
 			if(max==-1){
-				max=i;
+				max=lNoeud.get(n).getEnfant(i);
 			}
-			if(n.getEnfant(max).getB()<n.getEnfant(i).getB()){
-				max = i;
+			if(lNoeud.get(max).getB()<lNoeud.get(lNoeud.get(n).getEnfant(i)).getB()){
+				max = lNoeud.get(n).getEnfant(i);
 			}
 		}
-		return n.getEnfant(max);
+		return max;
 	}
 
-	public Noeud MaxB(Noeud n){
-		Noeud max = null;
-		ArrayList<Noeud> lN = new ArrayList<Noeud>();
-		for(int i=0; i<n.getNb_enfants(); i++){//Recuperation de noeud non développer
-			if(n.getEnfant(i).getB() == 0){
-				lN.add(n.getEnfant(i));
+	public int MaxB(int n, ArrayList<Noeud> lNoeud){
+		int max = -1;
+		ArrayList<Integer> lN = new ArrayList<Integer>();
+		for(int i=0; i<lNoeud.get(n).getNb_enfants(); i++){//Recuperation de noeud non développer
+			if(lNoeud.get(lNoeud.get(n).getEnfant(i)).getB() == 0){
+				lN.add(lNoeud.get(n).getEnfant(i));
 			}			
 		}
 		if(lN.size()>0){
 			int indexRand = (int) (Math.random() *lN.size() );
 			return lN.get(indexRand);//retour d'un noeud non développer tirer aléatoirement
 		}
-		return Max(n);
+		return Max(n, lNoeud);
 	}
 	
 	

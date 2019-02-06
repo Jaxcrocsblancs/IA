@@ -7,7 +7,7 @@ public class Noeud {
 	private Etat  etat; // etat du jeu
 	
 	private int parent; 
-	private ArrayList<Noeud> enfants; // liste d'enfants : chaque enfant correspond à un coup possible
+	private ArrayList<Integer> enfants; // liste d'enfants : chaque enfant correspond à un coup possible
 	private int nb_enfants;	// nb d'enfants présents dans la liste
 	
 	private double b;
@@ -16,7 +16,7 @@ public class Noeud {
 	
 	public Noeud(Etat e, int i){//racine
 		this.etat = e;
-		this.enfants = new ArrayList<Noeud>();
+		this.enfants = new ArrayList<Integer>();
 		this.parent = -1;
 		this.coup = -1;
 		this.joueur =  1;
@@ -32,7 +32,7 @@ public class Noeud {
 		this.etat = new Etat(e);
 		this.parent = parent;
 		this.coup = coup;
-		this.enfants = new ArrayList<Noeud>();
+		this.enfants = new ArrayList<Integer>();
 		this.joueur = Start.autreJoueur(joueur);
 		this.nb_enfants = 0; 
 		
@@ -46,9 +46,11 @@ public class Noeud {
 		return this.joueur;
 	}
 	
-	
+	public void ajouterEnfant(int coup, int indexEnfant){
+		this.enfants.add(indexEnfant);
+	}
 
-	public Noeud getEnfant(int c) {
+	public int getEnfant(int c) {
 		return this.enfants.get(c);
 	}
 
@@ -61,38 +63,38 @@ public class Noeud {
 	}
 
 	public int getNb_enfants() {
-		return this.nb_enfants;
+		return this.enfants.size();
 	}
 
 	public int getCoup() {
 		return this.coup;
 	}
 	
-	public boolean enfantTousDeveloppé(){
+	public boolean enfantTousDeveloppé(ArrayList<Noeud> lN){
 		if(this.enfants.size()==0){
 			return false;
 		}
-		for(Noeud e: this.enfants){
-			if (e.getNbPassage()==0){
+		for(int i: this.enfants){
+			if (lN.get(i).getNbPassage()==0){
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public Noeud getParent() {
+	public int getParent() {
 		return this.parent;
 	}
 
-	public void calcB() {
+	public void calcB(ArrayList<Noeud> lN) {
 		double c = Math.sqrt(2);
-		double rep = c*Math.sqrt(Math.log(this.parent.getNbPassage())/this.nbPassage);
+		double rep = c*Math.sqrt(Math.log(lN.get(this.parent).getNbPassage())/this.nbPassage);
 		double u = this.nb_victoires/this.nbPassage;
-		if(this.getParent().getJoueur() == -1){
-			this.b = rep +u ;
+		if(lN.get(this.parent).getJoueur() == -1){
+			this.b = rep -u ;
 		}
 		else{
-			this.b = rep -u;
+			this.b = rep +u;
 		}
 	}
 	private double getNbPassage() {
