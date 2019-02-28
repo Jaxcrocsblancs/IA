@@ -9,8 +9,8 @@ public class IA {
 	}
 	
 	public int UTC(Etat e){
-		long tempsDébut = System.currentTimeMillis();
-		int durée = 1000;
+		long tempsDebut = System.currentTimeMillis();
+		int duree = 1000;
 		int i = 0;
 		ArrayList<Noeud> listNoeud = new ArrayList<Noeud>();
 		Noeud racine = new Noeud(new Etat(e), 0);
@@ -22,9 +22,9 @@ public class IA {
 		}
 		int current, currentbis;
 		int indexRand;
-		while(System.currentTimeMillis()< (tempsDébut+durée)){//boucle tant qu'il reste du temps
+		while(System.currentTimeMillis()< (tempsDebut+duree)){//boucle tant qu'il reste du temps
 			current = 0;//retour à la racine
-			while(listNoeud.get(current).enfantTousDeveloppé(listNoeud)){//recherche d'un noeud pour continuer
+			while(listNoeud.get(current).enfantTousDeveloppe(listNoeud)){//recherche d'un noeud pour continuer
 				if(listNoeud.get(current).getNb_enfants() == 0){
 					for(int c: coupsPossible(listNoeud.get(current).getEtat())){
 						Noeud enfant = new Noeud(listNoeud.get(current).getEtat().coups(c), current, listNoeud.get(current).getJoueur(),c);
