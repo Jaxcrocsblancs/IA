@@ -41,7 +41,7 @@ public class IA {
 						Noeud enfant = new Noeud(listNoeud.get(current).getEtat().coups(c), current, listNoeud.get(current).getJoueur(),c);
 						listNoeud.add(enfant);
 						listNoeud.get(current).ajouterEnfant(c,listNoeud.size()-1);
-//						if(enfant.getEtat().testFin() != FinDePartie.NON){//test si fin de partie possible plutot que aléatoire
+//						if(enfant.getEtat().testFin() == FinDePartie.ORDI_GAGNE && enfant.getJoueur() == -1){//test si fin de partie possible plutot que aléatoire
 //							current =listNoeud.size()-1;
 //							pasFin = false;
 //						}
