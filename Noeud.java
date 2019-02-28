@@ -70,7 +70,7 @@ public class Noeud {
 		return this.coup;
 	}
 	
-	public boolean enfantTousDeveloppé(ArrayList<Noeud> lN){
+	public boolean enfantTousDeveloppe(ArrayList<Noeud> lN){
 		if(this.enfants.size()==0){
 			return false;
 		}
