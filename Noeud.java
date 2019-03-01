@@ -116,8 +116,9 @@ public class Noeud {
 	public double getPassage() {
 		return this.nbPassage;
 	}
-	
+
 	public double probaVic(){
 		return this.nb_victoires/this.nbPassage;
 	}
 }
+

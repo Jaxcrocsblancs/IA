@@ -10,7 +10,7 @@ public class IA {
 	
 	public int UTC(Etat e){
 		long tempsDebut = System.currentTimeMillis();
-		int duree = 10000;
+		int duree = 1000*Start.TEMPS;
 		int i = 0;
 		ArrayList<Noeud> listNoeud = new ArrayList<Noeud>();
 		Noeud racine = new Noeud(new Etat(e), 0);
@@ -25,15 +25,18 @@ public class IA {
 		while(System.currentTimeMillis()< (tempsDebut+duree)){//boucle tant qu'il reste du temps
 			current = 0;//retour à la racine
 			while(listNoeud.get(current).enfantTousDeveloppe(listNoeud)){//recherche d'un noeud pour continuer
+
 				current = MaxB(current, listNoeud);// selection du noeud suivant
 			}
 			while(listNoeud.get(current).getEtat().testFin() == FinDePartie.NON){//Marche aléatoire
 				boolean pasFin = true;
+
 				if(listNoeud.get(current).getNb_enfants() == 0){
 					for(int c: coupsPossible(listNoeud.get(current).getEtat())){
 						Noeud enfant = new Noeud(listNoeud.get(current).getEtat().coups(c), current, listNoeud.get(current).getJoueur(),c);
 						listNoeud.add(enfant);
 						listNoeud.get(current).ajouterEnfant(c,listNoeud.size()-1);
+
 						if(enfant.getEtat().testFin() != FinDePartie.NON){//test si fin de partie possible plutot que aléatoire
 							current =listNoeud.size()-1;
 							pasFin = false;
@@ -73,6 +76,7 @@ public class IA {
 		while(listNoeud.get(MaxMax(0,listNoeud)).getCoup() != listNoeud.get(MaxRobuste(0,listNoeud)).getCoup()){//tant que max et robuste sont pas identique
 			current = 0;//retour à la racine
 			while(listNoeud.get(current).enfantTousDeveloppe(listNoeud)){//recherche d'un noeud pour continuer
+
 				current = MaxB(current, listNoeud);// selection du noeud suivant
 			}
 			while(listNoeud.get(current).getEtat().testFin() == FinDePartie.NON){//Marche aléatoire
@@ -82,10 +86,12 @@ public class IA {
 						Noeud enfant = new Noeud(listNoeud.get(current).getEtat().coups(c), current, listNoeud.get(current).getJoueur(),c);
 						listNoeud.add(enfant);
 						listNoeud.get(current).ajouterEnfant(c,listNoeud.size()-1);
+
 						if(enfant.getEtat().testFin() == FinDePartie.NON){//test si fin de partie possible plutot que aléatoire
 							current =listNoeud.size()-1;
 							pasFin = false;
 						}
+
 					}
 				}
 				if(pasFin){
@@ -97,6 +103,7 @@ public class IA {
 			if(listNoeud.get(current).getEtat().testFin() == FinDePartie.ORDI_GAGNE){
 				vic = true;
 			}
+
 			currentbis = current;
 			while(currentbis != 0){
 				if(vic){
@@ -116,6 +123,7 @@ public class IA {
 			i++;
 			
 		}
+
 		
 		
 		
@@ -143,7 +151,9 @@ public class IA {
 			if(max==-1){
 				max=lNoeud.get(n).getEnfant(i);
 			}
+
 			if(lNoeud.get(max).probaVic()<lNoeud.get(lNoeud.get(n).getEnfant(i)).probaVic()){
+
 				max = lNoeud.get(n).getEnfant(i);
 			}
 		}
@@ -185,5 +195,5 @@ public class IA {
 		
 		return rep;
 	}
-
 }
+

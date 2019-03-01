@@ -78,9 +78,4 @@ public class Fenetre extends JPanel implements Observer{
 			JOptionPane.showMessageDialog(null,m.getEtat().testFin());
 		}
 	}
-	
-	
-	
-	
-	
 }
