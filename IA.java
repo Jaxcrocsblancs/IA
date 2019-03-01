@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Random;
-
 
 public class IA {
 
@@ -15,17 +13,12 @@ public class IA {
 		ArrayList<Noeud> listNoeud = new ArrayList<Noeud>();
 		Noeud racine = new Noeud(new Etat(e), 0);
 		listNoeud.add(racine);
-		for(int c: coupsPossible(e)){
-			Noeud enfant = new Noeud(listNoeud.get(0).getEtat().coups(c), 0, listNoeud.get(0).getJoueur(),c);
-			listNoeud.add(enfant);
-			racine.ajouterEnfant(c,listNoeud.size()-1);
-		}
+	
 		int current, currentbis;
 		int indexRand;
 		while(System.currentTimeMillis()< (tempsDebut+duree)){//boucle tant qu'il reste du temps
 			current = 0;//retour à la racine
 			while(listNoeud.get(current).enfantTousDeveloppe(listNoeud)){//recherche d'un noeud pour continuer
-
 				current = MaxB(current, listNoeud);// selection du noeud suivant
 			}
 			while(listNoeud.get(current).getEtat().testFin() == FinDePartie.NON){//Marche aléatoire

@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 public class Start extends JFrame{
 	public static int LARGEUR_MAX=9;	// nb max de fils pour un noeud (= nb max de coups possibles)
 
-	public static int TEMPS=3;		// temps de calcul pour un coup avec MCTS (en secondes)
+	public static int TEMPS=1;		// temps de calcul pour un coup avec MCTS (en secondes)
 	public static int LARGEUR = 7;
 	public static int HAUTEUR = 6;
 	//Paramètres du jeu
